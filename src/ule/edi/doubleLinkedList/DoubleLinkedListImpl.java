@@ -127,78 +127,174 @@ public class DoubleLinkedListImpl<T> implements DoubleList<T> {
 
 	@Override
 	public T removeFirst() throws EmptyCollectionException{
-		// TODO Auto-generated method stub
-		return null;
+		if(isEmpty()) throw new EmptyCollectionException("COLA VACIA");
+		DoubleNode<T> obj = new DoubleNode<T>(front.elem);
+		front=front.next;
+		front.prev=null;
+		return obj.elem;
 	}
 
 
 	@Override
 	public T removeLast()  throws EmptyCollectionException{
-		// TODO Auto-generated method stub
-		return null;
+		if(isEmpty()) throw new EmptyCollectionException("COLA VACIA");
+		DoubleNode<T> obj = new DoubleNode<T>(front.elem);
+		last=last.prev;
+		last.next=null;		
+		return obj.elem;
 	}
 
 
 	@Override
 	public void insertPos(T elem, int position) {
-		// TODO Auto-generated method stub
-		
+		if(elem==null) throw new NullPointerException();
+		if(position<=0) throw new IllegalArgumentException();
+		if (position>size()) insertLast(elem);
+		else {
+			DoubleNode<T> aux = front;
+			int posCounter=1;
+			while(aux!=null) {
+				if(posCounter==position) {
+					DoubleNode<T> obj = new DoubleNode<T>(elem);
+					aux.prev=obj;
+					obj.next=aux;
+					obj.prev=aux.prev;
+					aux.prev.next=obj;
+					aux=last;
+				}
+				posCounter++;
+				aux=aux.next;
+			}
+		}
 	}
 
 
 	@Override
 	public void insertBefore(T elem, T target) {
-		// TODO Auto-generated method stub
-		
+		if(elem==null || target==null) throw new NullPointerException();
+		if(!contains(target)) throw new NoSuchElementException();
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			if(aux.elem==target) {
+				DoubleNode<T> obj = new DoubleNode<T>(elem);
+				aux.prev=obj;
+				obj.next=aux;
+				obj.prev=aux.prev;
+				aux.prev.next=obj;
+				aux=last;
+			}
+			aux=aux.next;
+		}
+
 	}
 
 
 	@Override
 	public T getElemPos(int position) {
-		// TODO Auto-generated method stub
-		return null;
+		if(position<1 || position>size()) throw new IllegalArgumentException();
+		DoubleNode<T> obj = new DoubleNode<T>(null);
+		DoubleNode<T> aux = front;
+		int posCounter=1;
+		while(aux!=null) {
+			if(posCounter==position) {
+				obj.elem = aux.elem;
+				aux=last;
+			}
+			aux=aux.next;
+		}
+		return obj.elem;
 	}
 
 
 	@Override
 	public int getPosFirst(T elem) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(elem==null) throw new NullPointerException();
+		if(!contains(elem)) throw new NoSuchElementException();
+		int pos=0;
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			pos++;
+			if(elem==aux.elem) aux=last;
+			aux=aux.next;
+		}
+		return pos;
 	}
 
 
 	@Override
 	public int getPosLast(T elem) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(elem==null) throw new NullPointerException();
+		if(!contains(elem)) throw new NoSuchElementException();
+		int pos=0;
+		DoubleNode<T> aux = last;
+		while(aux!=null) {
+			pos++;
+			if(elem==aux.elem) aux=front;
+			aux=aux.prev;
+		}
+		return pos;
 	}
 
 
 	@Override
 	public T removePos(int pos) {
-		// TODO Auto-generated method stub
-		return null;
+		if(pos<1 || pos>size()) throw new IllegalArgumentException();
+		int posCounter=0;
+		DoubleNode<T> obj = new DoubleNode<T>(null);
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			posCounter++;
+			if(pos==posCounter) {
+				obj=aux;
+				aux.prev.next=aux.next;
+				aux.next.prev=aux.prev;
+				aux=last;
+			}
+			aux=aux.next;
+		}
+		return obj.elem;
 	}
 
 
 	@Override
 	public int removeAll(T elem) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(elem==null) throw new NullPointerException();
+		if(!contains(elem)) throw new NoSuchElementException();
+		int removeCounter=0;
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			if(elem==aux.elem) {
+				aux.prev.next=aux.next;
+				aux.next.prev=aux.prev;
+				removeCounter++;
+			}
+			aux=aux.next;
+		}
+		return removeCounter;
 	}
 
 
 	@Override
 	public boolean contains(T elem) {
-		// TODO Auto-generated method stub
+		if(elem==null) throw new NullPointerException();
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			if(elem==aux.elem) return true;
+			aux=aux.next;
+		}
 		return false;
 	}
 
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		int size=0;
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			size++;
+			aux=aux.next;
+		}
+		return size;
 	}
 
 
@@ -251,8 +347,8 @@ public class DoubleLinkedListImpl<T> implements DoubleList<T> {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-     return null;
+
+		return null;
 	}
 
 	@Override
