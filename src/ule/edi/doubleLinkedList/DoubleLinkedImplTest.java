@@ -93,5 +93,34 @@ public void antesDe() {
 	    	Assert.assertTrue(listaConElems.maxRepeated()==3);
 	        	  
 	}
+	
+	@Test
+    public void maxRepeated() {
+        
+        lv.insertFirst("A");
+        lv.insertLast("B");
+        lv.insertLast("C");
+        lv.insertLast("D");
+        lv.insertLast("E");
+        lv.insertLast("F");
+        lv.insertLast("G");
+        lv.insertLast("H");
+        lv.insertLast("I");
+        lv.insertLast("J");
+        lv.insertLast("K");
+        lv.insertLast("L");
+        lv.insertLast("M");
+        lv.insertLast("N");
+        lv.insertLast("A");
+        lv.insertLast("B");
+        lv.insertLast("A");
+        lv.insertLast("P");
+        lv.insertLast("O");
+        lv.insertLast("Q");
+        lv.insertLast("A");
+        
+        Assert.assertEquals(4,lv.maxRepeated());
+        
+    }
 
 }

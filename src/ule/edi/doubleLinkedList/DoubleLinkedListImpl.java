@@ -79,7 +79,7 @@ public class DoubleLinkedListImpl<T> implements DoubleList<T> {
 
 	@Override
 	public boolean isEmpty() {
-		return (front.prev==null && last.next==null);
+		return (front==null && last==null);
 	}
 
 
@@ -94,16 +94,13 @@ public class DoubleLinkedListImpl<T> implements DoubleList<T> {
 	public void insertFirst(T elem) {
 		if(elem==null) throw new NullPointerException();
 		DoubleNode<T> obj = new DoubleNode<T>(elem); 
-		if(isEmpty()) {
-			front=obj;
-			obj.next=last;
-		}
+		if(isEmpty()) last=front=obj;
 		else {
 			obj.next=front;
 			front.prev=obj;
 			front=obj;
+			front.prev=null;
 		}
-		obj.prev=null;
 	}
 
 
@@ -111,17 +108,13 @@ public class DoubleLinkedListImpl<T> implements DoubleList<T> {
 	public void insertLast(T elem) {
 		if(elem==null) throw new NullPointerException();
 		DoubleNode<T> obj = new DoubleNode<T>(elem); 
-		if(isEmpty()) {
-			last=obj;
-			obj.prev=front;
-		}
+		if(isEmpty()) last=front=obj;
 		else {
-			last.next=obj;
 			obj.prev=last;
+			last.next=obj;
 			last=obj;
-		}
-		obj.next=null;
-		
+			last.next=null;
+		}		
 	}
 
 
@@ -300,55 +293,102 @@ public class DoubleLinkedListImpl<T> implements DoubleList<T> {
 
 	@Override
 	public String toStringReverse() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer output = new StringBuffer("(");
+		DoubleNode<T> aux = last;
+		while(aux!=null) {
+			output.append(aux.elem.toString() + " ");
+			aux=aux.prev;
+		}
+		output.append(")");
+		return output.toString();
 	}
 
 	@Override
 	public DoubleList<T> reverse() {
-		// TODO Auto-generated method stub
-		return null;
+		DoubleList<T> reverse = new DoubleLinkedListImpl<T>();
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			reverse.insertFirst(aux.elem);
+			aux=aux.next;
+		}
+		return reverse;
 	}
 
 
 	@Override
 	public int maxRepeated() {
-		// TODO Auto-generated method stub
-		return 0;
+		int counter=0,max=0;
+		DoubleNode<T> aux = front;
+		DoubleNode<T> aux2 = front;
+		T elemPivote;
+		while(aux!=null) {
+			aux2=aux;
+			elemPivote=aux.elem;
+			while(aux2!=null) {
+				if(elemPivote==aux2.elem) counter++;
+				aux2=aux2.next;
+			}
+			if(counter>max) max=counter;
+			counter=0;
+			aux=aux.next;
+		}
+		return max;
 	}
 
 
 	@Override
 	public boolean isEquals(DoubleList<T> other) {
-		// TODO Auto-generated method stub
-		return false;
+		if(other==null) throw new NullPointerException();
+		return (this.toString().equals(other.toString()));
 	}
 
 
 	@Override
 	public boolean containsAll(DoubleList<T> other) {
-		// TODO Auto-generated method stub
-		return false;
+		if(other==null)throw new NullPointerException();
+		DoubleNode<T> aux = front;
+		T elemPivote;
+		while(aux!=null) {
+			elemPivote=aux.elem;
+			if(!(other.contains(elemPivote))) return false;
+			aux=aux.next;
+		}
+		return true;
 	}
 
 
 	@Override
 	public boolean isSubList(DoubleList<T> other) {
-		// TODO Auto-generated method stub
+		if(other==null)throw new NullPointerException();
+		if (this.toString().contains(other.toString())) return true;
 		return false;
 	}
 
 
 	@Override
 	public String toStringFromUntil(int from, int until) {
-		// TODO Auto-generated method stub
-		return null;
+		if(from<=0||until<=0||until<from)throw new IllegalArgumentException();
+		int posCounter=1;
+		StringBuffer output= new StringBuffer("(");
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			if(posCounter>=from && posCounter<=until) output.append(aux.elem.toString() + " ");
+			aux=aux.next;
+		}
+		output.append(")");
+		return output.toString();
 	}
 	
 	@Override
 	public String toString() {
-
-		return null;
+		StringBuffer output = new StringBuffer("(");
+		DoubleNode<T> aux = front;
+		while(aux!=null) {
+			output.append(aux.elem.toString() + " ");
+			aux=aux.next;
+		}
+		output.append(")");
+		return output.toString();
 	}
 
 	@Override
